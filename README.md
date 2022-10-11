@@ -18,3 +18,5 @@ docker run -it -v /workspace/checkov-terraform/code:/root centos:centos8 /bin/ba
 dnf module -y install python38
 python3 -V
 pip3 install checkov
+checkov -d /root
+checkov -d /root --skip-check CKV_AZURE_160,CKV_AZURE_10,CKV_AZURE_33,CKV2_AZURE_18,CKV2_AZURE_1

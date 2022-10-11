@@ -32,13 +32,49 @@ resource "azurerm_network_security_group" "example" {
   resource_group_name = data.azurerm_resource_group.example.name
 
   security_rule {
-    name                       = "test123"
+    name                       = "test100"
     priority                   = 100
     direction                  = "Inbound"
     access                     = "Allow"
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "8080"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "test101"
+    priority                   = 101
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "22"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "test102"
+    priority                   = 102
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "80"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "test103"
+    priority                   = 103
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "3309"
     source_address_prefix      = "*"
     destination_address_prefix = "*"
   }
@@ -87,5 +123,23 @@ resource "azurerm_linux_virtual_machine" "example" {
   }
 
   #fix Prisma
-  allow_extension_operations=false
+  allow_extension_operations = false
+}
+
+###############################################
+
+resource "azurerm_storage_account" "example" {
+  name                     = "ethansta01"
+  resource_group_name      = data.azurerm_resource_group.example.name
+  location                 = data.azurerm_resource_group.example.location
+  account_tier             = "Standard"
+  account_replication_type = "GRS"
+
+  network_rules {
+    default_action             = "Deny"
+    ip_rules                   = ["100.0.0.1"]
+    virtual_network_subnet_ids = [azurerm_subnet.example.id]
+  }
+
+  min_tls_version = "TLS1_2"
 }
